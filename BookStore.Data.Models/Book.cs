@@ -25,6 +25,8 @@
         [ForeignKey(nameof(GenreId))]
         public Genre Genre { get; set; } = null!;
 
+        public string ImageUrl { get; set; }
+
         [Required]
         public int GenreId { get; set; }
 
