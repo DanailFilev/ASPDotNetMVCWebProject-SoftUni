@@ -68,6 +68,13 @@
             };
             genres.Add(genre);
 
+            genre = new Genre()
+            {
+                GenreId = 7,
+                Name = "Horror"
+            };
+            genres.Add(genre);
+
 
             return genres.ToArray();
         }
