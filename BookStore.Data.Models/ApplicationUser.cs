@@ -11,6 +11,7 @@
     {
         public ApplicationUser()
         {
+            this.Id = Guid.NewGuid();
             this.Orders = new HashSet<Order>(); 
             this.Reviews = new HashSet<Review>();
             this.Carts = new HashSet<Cart>();

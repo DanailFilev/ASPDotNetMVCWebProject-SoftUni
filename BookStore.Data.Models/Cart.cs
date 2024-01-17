@@ -9,6 +9,7 @@
     /// </summary>
     public class Cart
     {
+
         [Key]
         public int CartId { get; set; }
 

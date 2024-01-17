@@ -17,7 +17,59 @@
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
-            // Add other configurations as needed...
+            builder.HasData(this.GenerateGenres());
+        }
+
+        private Genre[] GenerateGenres()
+        {
+            ICollection<Genre> genres = new HashSet<Genre>();
+
+            Genre genre;
+
+            genre = new Genre()
+            {
+               GenreId = 1,
+               Name = "Science Fiction"
+            };
+            genres.Add(genre);
+
+            genre = new Genre()
+            {
+                GenreId = 2,
+                Name = "Mystery",
+            };
+            genres.Add(genre);
+
+            genre = new Genre()
+            {
+                GenreId = 3,
+                Name = "Romance",
+            };
+            genres.Add(genre);
+
+            genre = new Genre()
+            {
+                GenreId = 4,
+                Name = "Fantasy",
+            };
+            genres.Add(genre);
+
+            genre = new Genre()
+            {
+                GenreId = 5,
+                Name = "Thriller",
+            };
+            genres.Add(genre);
+
+            genre = new Genre()
+            {
+                GenreId = 6,
+                Name = "Drama",
+            };
+            genres.Add(genre);
+
+
+            return genres.ToArray();
         }
     }
 }
