@@ -3,5 +3,6 @@
 
     public interface IBookService
     {
+        IEnumerable<BookViewModel> GetAllBooks();
     }
 }
