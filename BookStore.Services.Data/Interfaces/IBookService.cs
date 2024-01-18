@@ -1,8 +1,9 @@
 ﻿namespace BookStore.Services.Data.Interfaces
 {
+    using BookStore.Web.ViewModels.Book;
 
     public interface IBookService
     {
-        IEnumerable<BookViewModel> GetAllBooks();
+        Task<IEnumerable<AllBookViewModel>> GetAllAsync();
     }
 }
