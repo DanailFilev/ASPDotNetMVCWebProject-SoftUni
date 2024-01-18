@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 using BookStore.Data;
 using BookStore.Data.Models;
+using BookStore.Web.Infrastructure.Extensions;
+using BookStore.Services.Data.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
 })
     .AddEntityFrameworkStores<BookStoreDbContext>();
+
+builder.Services.AddApplicationServices(typeof(IBookService));
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
