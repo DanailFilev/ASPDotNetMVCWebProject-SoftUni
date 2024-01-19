@@ -1,0 +1,32 @@
+﻿@model List<GenreViewModel>
+
+@{
+    ViewBag.Title = "All Genres";
+}
+
+<div class="container">
+    <h2 class="text-center">@ViewBag.Title</h2>
+    <hr />
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var genre in Model)
+            {
+                <div class="col-sm-6 col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@genre.Name</h5>
+                            <!-- Add other properties as needed -->
+                            <a asp-action="Details" asp-route-id="@genre.Id" class="btn btn-primary">Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No genres found.</p>
+    }
+</div>

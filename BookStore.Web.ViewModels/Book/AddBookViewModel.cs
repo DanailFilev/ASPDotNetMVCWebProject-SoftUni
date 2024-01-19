@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BookStore.Web.ViewModels.Genre;
 using static BookStore.Common.EntityValidationConstants.Book;
 
 
@@ -22,6 +23,9 @@ namespace BookStore.Web.ViewModels.Book
         [Required]
         [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; } = null!;
+
+        [Required]
+        public string AuthorBiography { get; set; }
 
         public string Price { get; set; }   
 

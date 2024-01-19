@@ -4,6 +4,7 @@
     using BookStore.Services.Data.Interfaces;
     using Microsoft.EntityFrameworkCore;
     using BookStore.Web.ViewModels.Book;
+    using BookStore.Web.ViewModels.Genre;
     using BookStore.Data.Models;
 
     public class BookService : IBookService
@@ -67,6 +68,7 @@
                     // Assuming you have FirstName and LastName properties in your AddBookViewModel
                     FirstName = model.AuthorFirstName,
                     LastName = model.AuthorLastName,
+                    Biography = model.AuthorBiography,
                     // Other author properties as needed
                 };
 

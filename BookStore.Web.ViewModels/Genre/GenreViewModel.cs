@@ -1,4 +1,4 @@
-﻿namespace BookStore.Web.ViewModels.Book
+﻿namespace BookStore.Web.ViewModels.Genre
 {
     public class GenreViewModel
     {
