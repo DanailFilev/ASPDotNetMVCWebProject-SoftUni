@@ -3,7 +3,7 @@
     using BookStore.Services.Data.Interfaces;
     using Microsoft.AspNetCore.Mvc;
 
-    public class GenreController : Controller
+    public class GenreController : BaseController
     {
         private readonly IGenreService genreService;
 

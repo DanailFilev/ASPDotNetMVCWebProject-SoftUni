@@ -15,7 +15,6 @@ namespace BookStore.Web.ViewModels.Book
         [StringLength(AuthorMaxLength, MinimumLength = AuthorMinLength)]
         public string Author { get; set; } = null!;
 
-        [Required]
         [MinLength(5)]
         public string ImageUrl { get; set; } = null!;
 
@@ -23,10 +22,7 @@ namespace BookStore.Web.ViewModels.Book
         [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; } = null!;
 
-        [Required]
-        public decimal Rating { get; set; }
-
         [Range(1, int.MaxValue)]
-        public int CategoryId { get; set; }
+        public int GenreId { get; set; }
     }
 }

@@ -10,5 +10,6 @@
 
         Task AddBookAsync(AddBookViewModel model);
 
+        Task<BookViewModel?> GetBookByIdAsync(int Id);
     }
 }

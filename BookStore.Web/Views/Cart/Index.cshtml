@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CartItemViewModel>  // Adjust the model based on your actual ViewModel for cart items
+
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+@if (Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Quantity</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Quantity</td>
+                    <td>
+                        <form method="post" asp-controller="Cart" asp-action="RemoveFromCart" asp-route-cartItemId="@item.CartItemId">
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <form method="post" asp-controller="Cart" asp-action="ClearCart">
+            <button type="submit" class="btn btn-warning">Clear Cart</button>
+        </form>
+    </div>
+}
+else
+{
+    <p class="text-center">Your shopping cart is empty.</p>
+}

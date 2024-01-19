@@ -10,21 +10,57 @@
 <div class="text-center row">
     @foreach (var book in Model)
     {
-        <div class="card col-4" style="width: 20rem; ">
-            <img class="card-img-top" style="width: 18rem;"
-             src="@book.ImageUrl" alt="Book Image">
+        <div class="card col-4" style="width: 20rem;">
+            <img class="card-img-top" style="width: 18rem;" src="@book.ImageUrl" alt="Book Image">
             <div class="card-body">
-
                 <h5 class="card-title mt-1">@book.Title</h5>
                 <p class="mb-0">Author: @book.Author</p>
-@*                <p class="mb-0">Rating: @book.Rating</p>
-                <p >Category: @book.Category</p>*@
-                <p >Description: @book.ShortDescription</p>*
+                <p>Description: @book.ShortDescription</p>
+
+                <!-- Quantity adjustment buttons -->
+                <div class="input-group">
+                    <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('@book.BookId')">-</button>
+                    <input type="text" class="form-control" value="1" id="quantity-@book.BookId" readonly>
+                    <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('@book.BookId')">+</button>
+                </div>
             </div>
 
-            <form class="input-group-sm" asp-controller="Book" asp-action="AddToCollection" asp-route-id="@book.Id">
-                <input type="submit" value="Add to Collection" class="fs-6 btn btn-success mb-3 p-2" />
+            <form method="post" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@book.BookId" id="addToCartForm">
+                <input type="hidden" name="quantity" id="quantity-input-@book.BookId" value="1" />
+                <button type="submit" class="btn btn-primary" onclick="redirectToCart()">Buy</button>
             </form>
         </div>
     }
 </div>
+
+<script>
+    function incrementQuantity(bookId) {
+        var quantityInput = document.getElementById('quantity-' + bookId);
+        var quantityHiddenInput = document.getElementById('quantity-input-' + bookId);
+
+        var currentQuantity = parseInt(quantityInput.value, 10);
+        quantityInput.value = (currentQuantity + 1).toString();
+        quantityHiddenInput.value = quantityInput.value;
+    }
+
+    function decrementQuantity(bookId) {
+        var quantityInput = document.getElementById('quantity-' + bookId);
+        var quantityHiddenInput = document.getElementById('quantity-input-' + bookId);
+
+        var currentQuantity = parseInt(quantityInput.value, 10);
+        if (currentQuantity > 1) {
+            quantityInput.value = (currentQuantity - 1).toString();
+            quantityHiddenInput.value = quantityInput.value;
+        }
+    }
+
+    function redirectToCart() {
+        // Submit the form
+        document.getElementById('addToCartForm').submit();
+
+        // Redirect to the Cart/Index page after a short delay (adjust as needed)
+        setTimeout(function () {
+            window.location.href = '@Url.Action("Index", "Cart")';
+        }, 500); // 500 milliseconds delay
+    }
+</script>

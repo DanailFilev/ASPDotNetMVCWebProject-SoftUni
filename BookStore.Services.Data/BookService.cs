@@ -6,6 +6,7 @@
     using BookStore.Web.ViewModels.Book;
     using BookStore.Web.ViewModels.Genre;
     using BookStore.Data.Models;
+    using System.ComponentModel.DataAnnotations;
 
     public class BookService : IBookService
     {
@@ -21,7 +22,7 @@
                        .Books
                        .Select(x => new AllBookViewModel()
                            {
-                               Id = x.BookId,
+                               BookId = x.BookId,
                                Title = x.Title,
                                Author = $"{x.Author.FirstName} {x.Author.LastName}",
                                ImageUrl = x.ImageUrl,
@@ -34,6 +35,34 @@
         {
             const int maxLength = 100; // You can adjust the character limit for short description
             return fullDescription?.Length > maxLength ? fullDescription.Substring(0, maxLength) + "..." : fullDescription ?? string.Empty;
+        }
+
+        public async Task<BookViewModel?> GetBookByIdAsync(int bookId)
+        {
+            // Retrieve the book from the database by its ID
+            var book = await dbContext.Books
+                .Where(b => b.BookId == bookId)
+                .FirstOrDefaultAsync();
+
+            // If the book is not found, you can handle it accordingly
+            if (book == null)
+            {
+                return null;
+            }
+
+            // Map the Book entity to a BookViewModel (adjust this based on your ViewModel structure)
+            var bookViewModel = new BookViewModel
+            {
+                Id = book.BookId,
+                Title = book.Title,
+                Author = $"{book.Author.FirstName} {book.Author.LastName}",
+                Description = book.Description,
+                ImageUrl = book.ImageUrl,
+                GenreId = book.GenreId, 
+                // Add other properties as needed
+            };
+
+            return bookViewModel;
         }
 
         public async Task<AddBookViewModel> GetNewAddBookModelAsync()

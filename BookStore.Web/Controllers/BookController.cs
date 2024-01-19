@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Authorize]
-    public class BookController : Controller
+    public class BookController : BaseController
     {
         private readonly IBookService bookService;
         public BookController(IBookService bookService)

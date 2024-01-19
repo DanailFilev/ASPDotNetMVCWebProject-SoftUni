@@ -4,11 +4,10 @@
     using Microsoft.AspNetCore.Mvc;
     using ViewModels.Home;
 
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public HomeController()
         {
-
         }
 
         public IActionResult Index()
