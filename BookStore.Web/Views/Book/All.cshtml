@@ -16,51 +16,13 @@
                 <h5 class="card-title mt-1">@book.Title</h5>
                 <p class="mb-0">Author: @book.Author</p>
                 <p>Description: @book.ShortDescription</p>
-
-                <!-- Quantity adjustment buttons -->
-                <div class="input-group">
-                    <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('@book.BookId')">-</button>
-                    <input type="text" class="form-control" value="1" id="quantity-@book.BookId" readonly>
-                    <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('@book.BookId')">+</button>
-                </div>
             </div>
 
-            <form method="post" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@book.BookId" id="addToCartForm">
-                <input type="hidden" name="quantity" id="quantity-input-@book.BookId" value="1" />
-                <button type="submit" class="btn btn-primary" onclick="redirectToCart()">Buy</button>
+            <form method="post" asp-controller="Cart" asp-action="AddToCart" id="addToCartForm">
+                <input type="hidden" name="bookId" value="@book.BookId" />
+                <input type="number" name="quantity" value="1" /> <!-- Adjust the input type based on your requirement -->
+                <button type="submit" class="btn btn-primary">Buy</button>
             </form>
         </div>
     }
 </div>
-
-<script>
-    function incrementQuantity(bookId) {
-        var quantityInput = document.getElementById('quantity-' + bookId);
-        var quantityHiddenInput = document.getElementById('quantity-input-' + bookId);
-
-        var currentQuantity = parseInt(quantityInput.value, 10);
-        quantityInput.value = (currentQuantity + 1).toString();
-        quantityHiddenInput.value = quantityInput.value;
-    }
-
-    function decrementQuantity(bookId) {
-        var quantityInput = document.getElementById('quantity-' + bookId);
-        var quantityHiddenInput = document.getElementById('quantity-input-' + bookId);
-
-        var currentQuantity = parseInt(quantityInput.value, 10);
-        if (currentQuantity > 1) {
-            quantityInput.value = (currentQuantity - 1).toString();
-            quantityHiddenInput.value = quantityInput.value;
-        }
-    }
-
-    function redirectToCart() {
-        // Submit the form
-        document.getElementById('addToCartForm').submit();
-
-        // Redirect to the Cart/Index page after a short delay (adjust as needed)
-        setTimeout(function () {
-            window.location.href = '@Url.Action("Index", "Cart")';
-        }, 500); // 500 milliseconds delay
-    }
-</script>

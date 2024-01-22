@@ -20,15 +20,42 @@
             var userId = GetCurrentUserId();
             var cartViewModel = await this.cartService.GetCartAsync(userId);
 
-            return View(cartViewModel);
+            int itemCount = cartService.GetItemCount();
+
+            // Pass the count to the view
+            ViewBag.CartItemCount = itemCount;
+
+            // Assuming CartViewModel has a property named CartItems
+            var cartItemViewModels = cartViewModel.CartItems;
+
+            return View(cartItemViewModels);
         }
+
+        // POST: Cart/UpdateQuantity
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantity(int cartItemId, int quantity)
+        {
+            var userId = GetCurrentUserId();
+
+            // Ensure the cartItemId is valid before updating the quantity
+            var cartItem = await cartService.GetCartItemAsync(userId, cartItemId);
+            if (cartItem == null)
+            {
+                return NotFound(); // Handle invalid cartItemId
+            }
+
+            await cartService.UpdateQuantityAsync(userId, cartItemId, quantity);
+
+            return Ok(); // Return success status
+        }
+
 
         // POST: Cart/AddToCart
         [HttpPost]
         public async Task<IActionResult> AddToCart(int bookId, int quantity)
         {
             var userId = GetCurrentUserId();
-
+           
             // Ensure the bookId is valid before adding to the cart
             var book = await bookService.GetBookByIdAsync(bookId);
             if (book == null)
@@ -39,6 +66,7 @@
             await cartService.AddToCartAsync(userId, bookId, quantity);
 
             return RedirectToAction("Index");
+
         }
 
         // POST: Cart/RemoveFromCart

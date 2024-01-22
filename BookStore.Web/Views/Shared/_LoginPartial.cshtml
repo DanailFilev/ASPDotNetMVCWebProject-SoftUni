@@ -7,10 +7,10 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Add">My Cart</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/account/profile">Profile</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+            <span class="badge badge-info">(0)</span>
+            <i class="bi bi-cart"></i>
+        </a>
     </li>
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
@@ -23,6 +23,15 @@
 }
 else
 {
+    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Cart">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+            <i class="bi bi-cart"></i>
+            @if (ViewBag.CartItemCount > 0)
+            {
+                <span class="badge text-bg-info">@ViewBag.CartItemCount</span>
+            }
+        </a>
+    </li>
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>

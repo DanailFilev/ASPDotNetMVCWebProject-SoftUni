@@ -6,7 +6,6 @@
     using BookStore.Web.ViewModels.Book;
     using BookStore.Web.ViewModels.Genre;
     using BookStore.Data.Models;
-    using System.ComponentModel.DataAnnotations;
 
     public class BookService : IBookService
     {
@@ -55,7 +54,7 @@
             {
                 Id = book.BookId,
                 Title = book.Title,
-                Author = $"{book.Author.FirstName} {book.Author.LastName}",
+                Author = book.Author != null ? $"{book.Author.FirstName} {book.Author.LastName}" : "Unknown Author",
                 Description = book.Description,
                 ImageUrl = book.ImageUrl,
                 GenreId = book.GenreId, 

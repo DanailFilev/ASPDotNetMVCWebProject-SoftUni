@@ -97,6 +97,38 @@
             }
         }
 
+        public async Task UpdateQuantityAsync(Guid userId, int cartItemId, int newQuantity)
+        {
+            // Retrieve the cart item
+            var cartItem = await dbContext.CartItems
+                .Where(ci => ci.Cart.UserId == userId && ci.CartItemId == cartItemId)
+                .FirstOrDefaultAsync();
+
+            if (cartItem != null)
+            {
+                // Update the quantity
+                cartItem.Quantity = newQuantity;
+
+                // Save changes to the database
+                await dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                // Handle the case where the cart item is not found (invalid cartItemId)
+                // You might choose to throw an exception, log an error, or handle it differently based on your requirements
+                // For now, let's throw an exception for illustration purposes
+                throw new ArgumentException("Invalid cart item ID");
+            }
+        }
+
+        public async Task<CartItem> GetCartItemAsync(Guid userId, int cartItemId)
+        {
+            return await dbContext.CartItems
+                .Include(ci => ci.Book)  // Include any related entities you need
+                .FirstOrDefaultAsync(ci => ci.Cart.UserId == userId && ci.CartItemId == cartItemId);
+        }
+
+
         public async Task ClearCartAsync(Guid userId)
         {
             var cart = await this.dbContext.Carts
@@ -108,6 +140,13 @@
                 cart.CartItems.Clear();
                 await this.dbContext.SaveChangesAsync();
             }
+        }
+
+        public int GetItemCount()
+        {
+            int itemCount = dbContext.CartItems.Count();
+
+            return itemCount;
         }
     }
 }
