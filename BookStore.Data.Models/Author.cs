@@ -22,6 +22,6 @@
         [DataType(DataType.MultilineText)]
         public string Biography { get; set; }
 
-        public virtual ICollection<Book> Books { get; set; }
+        public virtual ICollection<Book>? Books { get; set; }
     }
 }

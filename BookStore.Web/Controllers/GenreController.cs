@@ -1,7 +1,8 @@
 ﻿namespace BookStore.Web.Controllers
 {
     using BookStore.Services.Data.Interfaces;
-    using Microsoft.AspNetCore.Mvc;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
 
     public class GenreController : BaseController
     {
@@ -12,14 +13,15 @@
             this.genreService = genreService;
         }
 
-
+        [AllowAnonymous]
         public async Task<IActionResult> All()
         {
             var genres = await genreService.GetGenresAsync();
             return View(genres);
         }
 
-        public async Task<IActionResult> Details(int id)
+		[AllowAnonymous]
+		public async Task<IActionResult> Details(int id)
         {
             var genre = await genreService.GetGenreByIdAsync(id);
 

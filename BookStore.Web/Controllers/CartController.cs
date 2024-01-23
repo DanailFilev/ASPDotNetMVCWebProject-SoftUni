@@ -23,7 +23,7 @@
             int itemCount = cartService.GetItemCount();
 
             // Pass the count to the view
-            ViewBag.CartItemCount = itemCount;
+            TempData["CartItemCount"] = itemCount;
 
             // Assuming CartViewModel has a property named CartItems
             var cartItemViewModels = cartViewModel.CartItems;

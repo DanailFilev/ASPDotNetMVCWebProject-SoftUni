@@ -4,39 +4,63 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
-            <span class="badge badge-info">(0)</span>
-            <i class="bi bi-cart"></i>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Cart">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
-            <i class="bi bi-cart"></i>
-            @if (ViewBag.CartItemCount > 0)
-            {
-                <span class="badge text-bg-info">@ViewBag.CartItemCount</span>
-            }
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+	@if (SignInManager.IsSignedIn(User))
+	{
+		<li class="nav-item">
+			<a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+				<span id="cartItemCount" class="badge badge-dark d-inline-block">@ViewBag.CartItemCount</span>
+				<i class="bi bi-cart"></i>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+		</li>
+		<li class="nav-item">
+			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+				<button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+			</form>
+		</li>
+	}
+	else
+	{
+		<li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Cart">
+			<a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+				<i class="bi bi-cart"></i>
+				@if (ViewBag.CartItemCount > 0)
+				{
+					<span class="badge badge-dark d-inline-block">@ViewBag.CartItemCount</span>
+				}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+		</li>
+	}
 </ul>
+
+<script>
+	// Function to update cart quantity using TempData
+	function updateCartQuantity() {
+		var itemCount = @TempData["CartItemCount"] || 0;
+		$('#cartItemCount').text('(' + itemCount + ')');
+	}
+
+	//// Function to redirect to login page
+	//function redirectToLogin() {
+	//	window.location.href = '@Url.Page("/Account/Login", new { area = "Identity" })';
+	//}
+
+	// Call the function when the page loads or after cart updates
+	$(document).ready(function () {
+		updateCartQuantity();
+
+		// Optionally, set up an interval to periodically update the badge
+		setInterval(updateCartQuantity, 30000); // Update every 30 seconds (adjust as needed)
+	});
+
+	// Call the function when the page loads
+	document.addEventListener('DOMContentLoaded', updateCartQuantity);
+</script>

@@ -1,9 +1,11 @@
 ﻿namespace BookStore.Web.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
+	using System.Security.Claims;
 
-    public class BaseController : Controller
+	[Authorize]
+	public class BaseController : Controller
     {
         protected string GetUserId()
         {

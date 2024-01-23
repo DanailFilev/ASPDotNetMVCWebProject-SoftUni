@@ -1,7 +1,8 @@
 ﻿namespace BookStore.Web.Controllers
 {
     using System.Diagnostics;
-    using Microsoft.AspNetCore.Mvc;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
     using ViewModels.Home;
 
     public class HomeController : BaseController
@@ -10,6 +11,7 @@
         {
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var model = new IndexViewModel
