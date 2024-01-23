@@ -1,66 +1,53 @@
 ﻿namespace BookStore.Web.Controllers
 {
     using BookStore.Data.Models;
+    using BookStore.Services.Data;
     using BookStore.Services.Data.Interfaces;
+    using BookStore.Web.ViewModels.Review;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     public class ReviewController : BaseController
     {
         private readonly IReviewService reviewService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReviewController(IReviewService reviewService, UserManager<ApplicationUser> userManager)
+        public ReviewController(IReviewService reviewService)
         {
             this.reviewService = reviewService;
-            _userManager = userManager;
         }
 
         // GET: Reviews
-        public IActionResult Index(int bookId)
+        public async Task<IActionResult> Index()
         {
-            var reviews = this.reviewService.GetReviewsByBook(bookId);
+            var reviews = await this.reviewService.GetAllReviewsAsync();
             return View(reviews);
         }
 
         // GET: Reviews/Create
         public IActionResult Create()
         {
-            var model = new ReviewCreateViewModel
-            {
-                // Populate dropdown or provide necessary data for creating a new review
-                // For example, you might need a list of books to associate with the review
-            };
-
-            return View(model);
+            // Optional: If you need to load additional data for creating a review
+            // For example, a list of books for a dropdown in the view
+            // You can modify the Create view to use this data
+            return View();
         }
 
-        // POST: Reviews/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ReviewCreateViewModel model)
+        public async Task<IActionResult> Create(ReviewViewModel reviewViewModel)
         {
             if (ModelState.IsValid)
             {
-                // Get the currently logged-in user
-                var user = await _userManager.GetUserAsync(User);
-
-                // Map ViewModel to Review entity and save to database
-                var review = new Review
-                {
-                    BookId = model.BookId,
-                    UserId = user?.Id,
-                    Comment = model.Comment,
-                    Rating = model.Rating
-                };
-
-                this.reviewService.AddReview(review);
-
-                return RedirectToAction("Index", new { bookId = model.BookId });
+                await this.reviewService.CreateReviewAsync(reviewViewModel);
+                return RedirectToAction(nameof(Index));
             }
 
-            // If ModelState is not valid, return to the create view with the model
-            return View(model);
+            // Optional: If you need to load additional data for creating a review
+            // For example, a list of books for a dropdown in the view
+            // You can modify the Create view to use this data
+            return View(reviewViewModel);
         }
+
     }
 }

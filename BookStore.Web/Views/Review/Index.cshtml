@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ReviewViewModel>
+
+<h2>Reviews</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Review ID</th>
+                <th>Comment</th>
+                <th>Rating</th>
+                <th>Book Title</th>
+                <th>User Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model)
+            {
+                <tr>
+                    <td>@review.ReviewId</td>
+                    <td>@review.Comment</td>
+                    <td>@review.Rating</td>
+                    <td>@review.BookTitle</td>
+                    <td>@review.UserName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div
