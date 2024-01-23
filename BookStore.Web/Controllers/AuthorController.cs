@@ -1,7 +1,6 @@
 ﻿namespace BookStore.Web.Controllers
 {
     using BookStore.Data.Models;
-    using BookStore.Services.Data;
 	using BookStore.Services.Data.Interfaces;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
