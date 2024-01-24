@@ -27,7 +27,8 @@ namespace BookStore.Web.ViewModels.Book
         [Required]
         public string AuthorBiography { get; set; }
 
-        public string Price { get; set; }   
+        [Range(typeof(decimal), "0", "2000")]
+        public decimal Price { get; set; }   
 
         [Required(AllowEmptyStrings = false)]
         public string Url { get; set; } = null!;

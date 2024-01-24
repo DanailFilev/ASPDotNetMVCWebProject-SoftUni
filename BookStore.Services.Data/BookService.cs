@@ -111,7 +111,8 @@
                 Author = author, // Associate the book with the author
                 Description = model.Description,
                 ImageUrl = model.Url,
-                GenreId = model.GenreId
+                GenreId = model.GenreId,
+                Price = model.Price
             };
 
             // Add the new book to the context
