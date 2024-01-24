@@ -4,6 +4,7 @@ using BookStore.Data;
 using BookStore.Data.Models;
 using BookStore.Web.Infrastructure.Extensions;
 using BookStore.Services.Data.Interfaces;
+using BookStore.Web.Infrastructure.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 
 builder.Services.AddApplicationServices(typeof(IBookService));
 
-builder.Services.AddControllersWithViews();
+builder.Services
+    .AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+    });
 
 var app = builder.Build();
 
