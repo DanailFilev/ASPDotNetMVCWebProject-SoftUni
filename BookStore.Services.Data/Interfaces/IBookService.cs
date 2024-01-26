@@ -15,5 +15,9 @@
         void DeleteBook(int bookId);
 
         Task<DetailsViewModel> GetBookDetailsAsync(int bookId);
+
+        Task<EditBookViewModel?> GetBookByIdForEditAsync(int id);
+
+        Task EditBookAsync(EditBookViewModel model, int id);
     }
 }

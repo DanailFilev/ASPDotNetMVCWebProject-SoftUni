@@ -19,12 +19,17 @@
             </div>
             <div class="card-footer d-flex justify-content-between">
                 <form method="post" asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
-                    <button type="submit" class="btn btn-info">Details</button>
+                    <button type="submit" class="btn btn-info mr-2">Details</button>
+                </form>
+
+                <form method="post" asp-controller="Book" asp-action="Edit" id="editBookForm">
+                    <input type="hidden" name="bookId" value="@book.BookId" />
+                    <button type="submit" class="btn btn-warning mr-2">Edit</button>
                 </form>
 
                 <form method="post" asp-controller="Book" asp-action="Delete" id="deleteBookForm">
                     <input type="hidden" name="bookId" value="@book.BookId" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger mr-2">Delete</button>
                 </form>
 
                 <form method="post" asp-controller="Cart" asp-action="AddToCart" id="addToCartForm">

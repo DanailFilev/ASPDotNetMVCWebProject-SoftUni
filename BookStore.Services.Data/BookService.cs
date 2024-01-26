@@ -165,5 +165,58 @@
                
             }
         }
+
+        public async Task<EditBookViewModel?> GetBookByIdForEditAsync(int id)
+        {
+            var genres = await this.dbContext.Genres
+                .Select(g => new GenreViewModel()
+                {
+                    Id = g.GenreId,
+                    Name = g.Name,
+                })
+                .ToListAsync();
+
+            var model = await this.dbContext.Books
+                .Where(b => b.BookId == id)
+                .Include(b => b.Author) 
+                .Select(b => new EditBookViewModel()
+                {
+                    BookId = b.BookId,
+                    Title = b.Title,
+                    AuthorFirstName = b.Author.FirstName,
+                    AuthorLastName = b.Author.LastName,
+                    AuthorId = b.AuthorId,
+                    Description = b.Description,
+                    AuthorBiography = b.Author.Biography ?? string.Empty,
+                    Price = b.Price,
+                    Url = b.ImageUrl,
+                    GenreId = b.GenreId,
+                    StockQuantity = b.StockQuantity,
+                    Genres = genres
+                })
+                .FirstOrDefaultAsync();
+
+            return model;
+        }
+
+        public async Task EditBookAsync(EditBookViewModel model, int id)
+        {
+            var book = await this.dbContext.Books.FindAsync(id);
+
+            if (book != null)
+            {
+                book.Title = model.Title;
+                book.Author.FirstName = model.AuthorFirstName;
+                book.Author.LastName = model.AuthorLastName;
+                book.Author.Biography = model.AuthorBiography;
+                book.Description = model.Description;
+                book.ImageUrl = model.Url;
+                book.GenreId = model.GenreId;
+                book.Price = model.Price;
+                book.StockQuantity = model.StockQuantity;
+
+                await this.dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

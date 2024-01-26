@@ -60,6 +60,32 @@
             return View(bookDetails);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = await this.bookService.GetBookByIdForEditAsync(id);
+
+            if (model == null)
+            {
+                return NotFound(); // Display a 404 error page or redirect to a not-found view
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditBookViewModel model, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await this.bookService.EditBookAsync(model, id);
+
+            return RedirectToAction("Details", new { id });
+        }
+
         [HttpPost]
         public IActionResult Delete(int bookId)
         {
