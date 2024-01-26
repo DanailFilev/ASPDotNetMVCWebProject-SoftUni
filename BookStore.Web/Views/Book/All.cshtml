@@ -17,12 +17,22 @@
                 <p class="mb-0">Author: @book.Author</p>
                 <p>Description: @book.ShortDescription</p>
             </div>
+            <div class="card-footer d-flex justify-content-between">
+                <form method="post" asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
+                    <button type="submit" class="btn btn-info">Details</button>
+                </form>
 
-            <form method="post" asp-controller="Cart" asp-action="AddToCart" id="addToCartForm">
-                <input type="hidden" name="bookId" value="@book.BookId" />
-                <input type="number" name="quantity" value="1" /> <!-- Adjust the input type based on your requirement -->
-                <button type="submit" class="btn btn-primary">Buy</button>
-            </form>
+                <form method="post" asp-controller="Book" asp-action="Delete" id="deleteBookForm">
+                    <input type="hidden" name="bookId" value="@book.BookId" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+
+                <form method="post" asp-controller="Cart" asp-action="AddToCart" id="addToCartForm">
+                    <input type="hidden" name="bookId" value="@book.BookId" />
+                    <input type="number" name="quantity" value="1" class="form-control" style="width: 70px;" />
+                    <button type="submit" class="btn btn-primary">Buy</button>
+                </form>
+            </div>
         </div>
     }
 </div>

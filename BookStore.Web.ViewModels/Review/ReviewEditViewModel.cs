@@ -4,12 +4,14 @@
 
     public class ReviewEditViewModel
     {
+        [Range(1, int.MaxValue, ErrorMessage = "ReviewId must be greater than 0.")]
         public int ReviewId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Comment is required.")]
         public string Comment { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Rating is required.")]
+        [Range(1, 5, ErrorMessage = "Rating must be between {1} and {2}.")]
         public int Rating { get; set; }
     }
 }

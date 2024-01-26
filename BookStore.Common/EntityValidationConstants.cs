@@ -17,7 +17,7 @@
             public const int LastNameMaxLength = 50;
 
             public const int BiographyMinLength = 10;
-            public const int BiographyMaxLength = 1000;
+            public const int BiographyMaxLength = 5000;
 
         }
 
@@ -26,17 +26,14 @@
             public const int TitleMinLength = 2;
             public const int TitleMaxLength = 255;
 
-            public const int LastNameMinLength = 2;
-            public const int LastNameMaxLength = 50;
-
-            public const int BiographyMinLength = 10;
-            public const int BiographyMaxLength = 1000;
-
             public const int AuthorMinLength = 2;
             public const int AuthorMaxLength = 100;
 
             public const int GenreMinLength = 2;
             public const int GenreMaxLength = 150;
+
+            public const string PriceMinValue = "0.00";
+            public const string PriceMaxValue = "2000.00";
 
             public const string PriceType = "decimal(18, 2)";
 
@@ -61,6 +58,9 @@
         public static class CartItem
         {
             public const int QuantityMinValue = 1;
+
+            public const int TitleMinLength = 2;
+            public const int TitleMaxLength = 255;
         }
 
         public static class OrderItem

@@ -86,18 +86,19 @@
         public async Task AddBookAsync(AddBookViewModel model)
         {
             // Check if the author exists based on the provided AuthorId
-            Author author = await this.dbContext.Authors.FindAsync(model.AuthorId);
+            Author? author = await this.dbContext.Authors
+                            .FirstOrDefaultAsync(a =>
+                              a.FirstName == model.AuthorFirstName &&
+                              a.LastName == model.AuthorLastName);
 
             if (author == null)
             {
                 // If the author doesn't exist, create a new author record
                 author = new Author
                 {
-                    // Assuming you have FirstName and LastName properties in your AddBookViewModel
                     FirstName = model.AuthorFirstName,
                     LastName = model.AuthorLastName,
                     Biography = model.AuthorBiography,
-                    // Other author properties as needed
                 };
 
                 // Add the new author to the context
@@ -109,10 +110,11 @@
             {
                 Title = model.Title,
                 Author = author, // Associate the book with the author
-                Description = model.Description,
+                Description = model.Description ?? string.Empty,
                 ImageUrl = model.Url,
                 GenreId = model.GenreId,
-                Price = model.Price
+                Price = model.Price,
+                StockQuantity = model.StockQuantity,
             };
 
             // Add the new book to the context
@@ -120,6 +122,48 @@
 
             // Save changes to the database
             await this.dbContext.SaveChangesAsync();
+        }
+        public async Task<DetailsViewModel> GetBookDetailsAsync(int bookId)
+        {
+            var book = await this.dbContext.Books
+                .Include(b => b.Author)
+                .Include(b => b.Genre)
+                .FirstOrDefaultAsync(b => b.BookId == bookId);
+
+            if (book == null)
+            {
+                // Handle the case where the book is not found
+                return null;
+            }
+
+            var detailsViewModel = new DetailsViewModel
+            {
+                BookId = book.BookId,
+                Title = book.Title,
+                AuthorFullName = $"{book.Author.FirstName} {book.Author.LastName}",
+                GenreName = book.Genre.Name,
+                Price = book.Price,
+                Description = book.Description,
+                ImageUrl = book.ImageUrl
+            };
+
+            return detailsViewModel;
+        }
+
+        public void DeleteBook(int bookId)
+        {
+            var bookToDelete = this.dbContext.Books.Find(bookId);
+
+            if (bookToDelete != null)
+            {
+                this.dbContext.Books.Remove(bookToDelete);
+                this.dbContext.SaveChanges();
+            }
+            else
+            {
+                // Handle the case where the book with the specified ID was not found
+               
+            }
         }
     }
 }

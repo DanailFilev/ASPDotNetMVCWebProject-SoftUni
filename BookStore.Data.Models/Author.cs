@@ -20,7 +20,7 @@
 
         [MaxLength(BiographyMaxLength)]
         [DataType(DataType.MultilineText)]
-        public string Biography { get; set; }
+        public string? Biography { get; set; }
 
         public virtual ICollection<Book>? Books { get; set; }
     }

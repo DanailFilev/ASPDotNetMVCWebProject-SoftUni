@@ -11,5 +11,9 @@
         Task AddBookAsync(AddBookViewModel model);
 
         Task<BookViewModel?> GetBookByIdAsync(int Id);
+
+        void DeleteBook(int bookId);
+
+        Task<DetailsViewModel> GetBookDetailsAsync(int bookId);
     }
 }

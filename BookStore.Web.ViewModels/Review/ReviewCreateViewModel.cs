@@ -5,13 +5,14 @@
 
     public class ReviewCreateViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Comment is required.")]
         public string Comment { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Rating is required.")]
+        [Range(1, 5, ErrorMessage = "Rating must be between {1} and {2}.")]
         public int Rating { get; set; }
 
-        [Required(ErrorMessage = "Please select a Book")]
+        [Required(ErrorMessage = "Please select a Book.")]
         public int BookId { get; set; }
 
         // Property to hold the dropdown list

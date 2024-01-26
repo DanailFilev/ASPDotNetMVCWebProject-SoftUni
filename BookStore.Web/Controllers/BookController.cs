@@ -1,9 +1,11 @@
 ﻿namespace BookStore.Web.Controllers
 {
+    using BookStore.Services.Data;
     using BookStore.Services.Data.Interfaces;
     using BookStore.Web.ViewModels.Book;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
 
     public class BookController : BaseController
     {
@@ -50,6 +52,28 @@
             await bookService.AddBookAsync(model);
 
             return RedirectToAction(nameof(All));
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var bookDetails = await this.bookService.GetBookDetailsAsync(id);
+            return View(bookDetails);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int bookId)
+        {
+            try
+            {
+                this.bookService.DeleteBook(bookId);
+                TempData["SuccessMessage"] = "Book deleted successfully.";
+            }
+            catch (KeyNotFoundException)
+            {
+                TempData["ErrorMessage"] = "Book not found. Unable to delete.";
+            }
+
+            return RedirectToAction("AllBooks");
         }
     }
 }
