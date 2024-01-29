@@ -21,12 +21,7 @@
                 <form method="post" asp-controller="Book" asp-action="Details" asp-route-id="@book.BookId">
                     <button type="submit" class="btn btn-info mr-2">Details</button>
                 </form>
-
-                <form method="post" asp-controller="Book" asp-action="Edit" id="editBookForm">
-                    <input type="hidden" name="bookId" value="@book.BookId" />
-                    <button type="submit" class="btn btn-warning mr-2">Edit</button>
-                </form>
-
+                <a asp-controller="Book" asp-action="Edit" asp-route-id="@book.BookId" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Edit</a>
                 <form method="post" asp-controller="Book" asp-action="Delete" id="deleteBookForm">
                     <input type="hidden" name="bookId" value="@book.BookId" />
                     <button type="submit" class="btn btn-danger mr-2">Delete</button>
@@ -41,3 +36,7 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

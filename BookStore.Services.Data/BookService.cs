@@ -144,7 +144,8 @@
                 GenreName = book.Genre.Name,
                 Price = book.Price,
                 Description = book.Description,
-                ImageUrl = book.ImageUrl
+                ImageUrl = book.ImageUrl,
+                StockQuantity = book.StockQuantity
             };
 
             return detailsViewModel;
@@ -202,13 +203,17 @@
         public async Task EditBookAsync(EditBookViewModel model, int id)
         {
             var book = await this.dbContext.Books.FindAsync(id);
+            Author author = new Author 
+            {
+                FirstName = model.AuthorFirstName,
+                LastName = model.AuthorLastName,
+                Biography = model.AuthorBiography,
+            };
 
             if (book != null)
             {
                 book.Title = model.Title;
-                book.Author.FirstName = model.AuthorFirstName;
-                book.Author.LastName = model.AuthorLastName;
-                book.Author.Biography = model.AuthorBiography;
+                book.Author = author; 
                 book.Description = model.Description;
                 book.ImageUrl = model.Url;
                 book.GenreId = model.GenreId;
