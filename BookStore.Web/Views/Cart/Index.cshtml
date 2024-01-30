@@ -76,6 +76,7 @@ else
 					headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
 					success: function () {
 						console.log('Quantity updated successfully.');
+						location.reload();
 					},
 					error: function () {
 						console.error('Failed to update quantity.');
