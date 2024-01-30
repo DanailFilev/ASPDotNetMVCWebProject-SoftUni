@@ -20,10 +20,10 @@
             var userId = GetCurrentUserId();
             var cartViewModel = await this.cartService.GetCartAsync(userId);
 
-            int itemCount = cartService.GetItemCount();
+            //int itemCount = cartService.GetItemCount();
 
-            // Pass the count to the view
-            TempData["CartItemCount"] = itemCount;
+            //// Pass the count to the view
+            //TempData["CartItemCount"] = itemCount;
 
             // Assuming CartViewModel has a property named CartItems
             var cartItemViewModels = cartViewModel.CartItems;
@@ -31,8 +31,16 @@
             return View(cartItemViewModels);
         }
 
-        // POST: Cart/UpdateQuantity
-        [HttpPost]
+		[HttpGet]
+		public IActionResult GetCartQuantity()
+		{
+			var userId = GetCurrentUserId();
+			var itemCount = cartService.GetItemsCount(userId);
+			return Json(new { CartItemCount = itemCount });
+		}
+
+		// POST: Cart/UpdateQuantity
+		[HttpPost]
         public async Task<IActionResult> UpdateQuantity(int cartItemId, int quantity)
         {
             var userId = GetCurrentUserId();

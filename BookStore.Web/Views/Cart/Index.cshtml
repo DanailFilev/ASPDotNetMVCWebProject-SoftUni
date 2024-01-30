@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CartItemViewModel>
 
 @{
-    ViewBag.Title = "Shopping Cart";
+	ViewBag.Title = "Shopping Cart";
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
@@ -9,78 +9,79 @@
 
 @if (Model.Any())
 {
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Book Title</th>
-                <th>Quantity</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @item.Title
-                    </td>
-                    <td>
-                        <form method="post" asp-controller="Cart" asp-action="UpdateQuantity" asp-route-cartItemId="@item.CartItemId">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="adjustQuantity(@item.CartItemId, -1)">-</button>
-                            <input type="text" class="form-control form-control-sm text-center" name="quantity" id="quantity-input-@item.CartItemId" value="@item.Quantity" readonly>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="adjustQuantity(@item.CartItemId, 1)">+</button>
-                            <input type="hidden" id="current-quantity-@item.CartItemId" name="currentQuantity" value="@item.Quantity">
-                            <input type="submit" class="visually-hidden" />
-                        </form>
-                    </td>
-                    <td>
-                        <form method="post" asp-controller="Cart" asp-action="RemoveFromCart" asp-route-cartItemId="@item.CartItemId">
-                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Book Title</th>
+				<th>Quantity</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@item.Title
+					</td>
+					<td>
+						<form method="post" asp-controller="Cart" asp-action="UpdateQuantity" asp-route-cartItemId="@item.CartItemId">
+							<button type="button" class="btn btn-outline-secondary btn-sm" onclick="adjustQuantity(@item.CartItemId, -1)">-</button>
+							<input type="text" class="form-control form-control-sm text-center" name="quantity" id="quantity-input-@item.CartItemId" value="@item.Quantity" readonly>
+							<button type="button" class="btn btn-outline-secondary btn-sm" onclick="adjustQuantity(@item.CartItemId, 1)">+</button>
+							<input type="hidden" id="current-quantity-@item.CartItemId" name="currentQuantity" value="@item.Quantity">
+							<input type="submit" class="visually-hidden" />
+						</form>
+					</td>
+					<td>
+						<form method="post" asp-controller="Cart" asp-action="RemoveFromCart" asp-route-cartItemId="@item.CartItemId">
+							<button type="submit" class="btn btn-danger btn-sm">Remove</button>
+						</form>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 
-    <div class="text-center">
-        <form method="post" asp-controller="Cart" asp-action="ClearCart">
-            <button type="submit" class="btn btn-warning">Clear Cart</button>
-        </form>
-    </div>
+	<div class="text-center">
+		<form method="post" asp-controller="Cart" asp-action="ClearCart">
+			<button type="submit" class="btn btn-warning">Clear Cart</button>
+		</form>
+	</div>
 }
 else
 {
-    <p class="text-center">Your shopping cart is empty.</p>
+	<p class="text-center">Your shopping cart is empty.</p>
 }
 
 @section scripts {
-    <script>
-        function adjustQuantity(cartItemId, adjustment) {
-            var inputElement = document.getElementById(`quantity-input-${cartItemId}`);
-            var currentQuantityElement = document.getElementById(`current-quantity-${cartItemId}`);
+	<script>
+		function adjustQuantity(cartItemId, adjustment) {
+			var inputElement = document.getElementById(`quantity-input-${cartItemId}`);
+			var currentQuantityElement = document.getElementById(`current-quantity-${cartItemId}`);
 
-            var newValue = parseInt(currentQuantityElement.value) + adjustment;
+			var newValue = parseInt(currentQuantityElement.value) + adjustment;
 
-            if (newValue > 0) {
-                inputElement.value = newValue;
-                currentQuantityElement.value = newValue;
+			if (newValue > 0) {
+				inputElement.value = newValue;
+				currentQuantityElement.value = newValue;
 
-                // Save the new quantity to session storage
-                sessionStorage.setItem(`quantity-${cartItemId}`, newValue);
+				// Save the new quantity to session storage
+				sessionStorage.setItem(`quantity-${cartItemId}`, newValue);
 
-                // Send an AJAX request to update the quantity in the database
-                $.ajax({
-                    url: `/Cart/UpdateQuantity?cartItemId=${cartItemId}&quantity=${newValue}`,
-                    type: 'POST',
-                    success: function () {
-                        console.log('Quantity updated successfully.');
-                    },
-                    error: function () {
-                        console.error('Failed to update quantity.');
-                    }
-                });
-            }
-        }
-    </script>
+				// Send an AJAX request to update the quantity in the database
+				$.ajax({
+					url: `/Cart/UpdateQuantity?cartItemId=${cartItemId}&quantity=${newValue}`,
+					type: 'POST',
+					headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+					success: function () {
+						console.log('Quantity updated successfully.');
+					},
+					error: function () {
+						console.error('Failed to update quantity.');
+					}
+				});
+			}
+		}
+	</script>
 }

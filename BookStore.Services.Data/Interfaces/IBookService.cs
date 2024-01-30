@@ -12,7 +12,7 @@
 
         Task<BookViewModel?> GetBookByIdAsync(int Id);
 
-        void DeleteBook(int bookId);
+        Task DeleteBookAsync(int bookId);
 
         Task<DetailsViewModel> GetBookDetailsAsync(int bookId);
 

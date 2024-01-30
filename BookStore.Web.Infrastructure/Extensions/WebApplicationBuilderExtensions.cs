@@ -40,6 +40,8 @@
             }
 
             services.AddScoped<IBookService, BookService>();
+
+            services.AddSession();
         }
     }
 }

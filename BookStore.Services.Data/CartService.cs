@@ -97,7 +97,17 @@
             }
         }
 
-        public async Task UpdateQuantityAsync(Guid userId, int cartItemId, int newQuantity)
+		public int GetItemsCount(Guid userId)
+		{
+			var itemCount = dbContext.Carts
+			.Where(cart => cart.UserId == userId)
+			.SelectMany(cart => cart.CartItems)
+			.Sum(cartItem => cartItem.Quantity);
+
+			return itemCount;
+		}
+
+		public async Task UpdateQuantityAsync(Guid userId, int cartItemId, int newQuantity)
         {
             // Retrieve the cart item
             var cartItem = await dbContext.CartItems
@@ -142,11 +152,10 @@
             }
         }
 
-        public int GetItemCount()
-        {
-            int itemCount = dbContext.CartItems.Count();
-
-            return itemCount;
-        }
+        //public int GetItemCount()
+        //{
+        //    int cartItemCount = dbContext.CartItems.Sum(item => item.Quantity);
+        //    return cartItemCount;
+        //}
     }
 }

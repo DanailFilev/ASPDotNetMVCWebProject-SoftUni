@@ -151,19 +151,18 @@
             return detailsViewModel;
         }
 
-        public void DeleteBook(int bookId)
+        public async Task DeleteBookAsync(int bookId)
         {
-            var bookToDelete = this.dbContext.Books.Find(bookId);
+            var bookToDelete = await this.dbContext.Books.FindAsync(bookId);
 
             if (bookToDelete != null)
             {
                 this.dbContext.Books.Remove(bookToDelete);
-                this.dbContext.SaveChanges();
+                await this.dbContext.SaveChangesAsync();
             }
             else
             {
                 // Handle the case where the book with the specified ID was not found
-               
             }
         }
 

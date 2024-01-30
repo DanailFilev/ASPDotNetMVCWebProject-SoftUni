@@ -1,4 +1,4 @@
-﻿@using BookStore.Data.Models;
+﻿@using BookStore.Data.Models
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -8,7 +8,7 @@
 	{
 		<li class="nav-item">
 			<a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
-				<span id="cartItemCount" class="badge badge-dark d-inline-block">@ViewBag.CartItemCount</span>
+				<span id="cartItemCount" class="badge badge-custom" style="background-color: white; visibility: visible; color: black">@TempData["CartItemCount"]</span>
 				<i class="bi bi-cart"></i>
 			</a>
 		</li>
@@ -23,35 +23,55 @@
 	}
 	else
 	{
-		<li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Cart">
-			<a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+		<li class="nav-item" title="View Cart">
+			<a class="nav-link text-dark" href="javascript:void(0);" onclick="redirectToLogin()">
+				<span id="cartItemCount" class="badge badge-custom" style="background-color: white; visibility: visible; color: black">@TempData["CartItemCount"]</span>
 				<i class="bi bi-cart"></i>
-				@if (ViewBag.CartItemCount > 0)
-				{
-					<span class="badge badge-dark d-inline-block">@ViewBag.CartItemCount</span>
-				}
 			</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+			<a class="nav-link text-dark" href="javascript:void(0);" onclick="redirectToLogin()">Login</a>
 		</li>
 	}
 </ul>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-	// Function to update cart quantity using TempData
+	// Function to update cart quantity using AJAX
 	function updateCartQuantity() {
-		var itemCount = @TempData["CartItemCount"] || 0;
-		$('#cartItemCount').text('(' + itemCount + ')');
+		// Check if the user is logged in (you may need to adjust this condition based on your authentication logic)
+		var isAuthenticated = @(SignInManager.IsSignedIn(User) ? "true" : "false");
+
+		if (isAuthenticated) {
+			// User is logged in, execute the AJAX request to get the cart quantity
+			$.ajax({
+				url: '/Cart/GetCartQuantity',
+				type: 'GET',
+				success: function (data) {
+					console.log('AJAX response:', data);
+					var itemCount = data.cartItemCount || 0;
+					$('#cartItemCount').text('(' + itemCount + ')');
+				},
+				error: function () {
+					console.error('Failed to get cart quantity.');
+				}
+			});
+		} else {
+			// User is not logged in, you may choose to handle this case differently or do nothing
+		}
 	}
 
-	//// Function to redirect to login page
-	//function redirectToLogin() {
-	//	window.location.href = '@Url.Page("/Account/Login", new { area = "Identity" })';
-	//}
+	// Function to redirect to login page
+	function redirectToLogin() {
+		var returnUrl = '@Url.Action("Index", "Cart", new { area = "" })';
+		var loginUrl = '@Url.Page("/Account/Login", new { area = "Identity" })' + '?returnUrl=' + encodeURIComponent(returnUrl);
+
+		window.location.href = loginUrl;
+	}
 
 	// Call the function when the page loads or after cart updates
 	$(document).ready(function () {

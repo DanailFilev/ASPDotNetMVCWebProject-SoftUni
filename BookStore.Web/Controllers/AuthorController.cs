@@ -87,7 +87,7 @@
 					}
 				}
 			}
-			return View(author);
+			return View("Delete", author);
 		}
 
 		public async Task<IActionResult> Delete(int id)
@@ -101,8 +101,7 @@
 			return View(author);
 		}
 
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
+		[HttpPost]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			await this.authorService.DeleteAuthorAsync(id);

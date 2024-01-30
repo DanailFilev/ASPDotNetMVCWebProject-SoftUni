@@ -93,7 +93,7 @@
         {
             try
             {
-                this.bookService.DeleteBook(bookId);
+                this.bookService.DeleteBookAsync(bookId);
                 TempData["SuccessMessage"] = "Book deleted successfully.";
             }
             catch (KeyNotFoundException)
