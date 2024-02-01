@@ -6,6 +6,7 @@ using BookStore.Web.Infrastructure.Extensions;
 using BookStore.Services.Data.Interfaces;
 using BookStore.Web.Infrastructure.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

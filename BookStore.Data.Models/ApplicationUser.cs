@@ -2,8 +2,9 @@
 {
     using Microsoft.AspNetCore.Identity;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+	using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations.Schema;
+    using static BookStore.Common.EntityValidationConstants.User;
     /// <summary>
     /// Represents registered users of the application.
     /// </summary>
@@ -16,6 +17,14 @@
             this.Reviews = new HashSet<Review>();
             this.Carts = new HashSet<Cart>();
         }
+
+        [Required]
+        [MaxLength(FirstNameMaxLength)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [MaxLength(LastNameMaxLength)]
+        public string LastName { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
 
