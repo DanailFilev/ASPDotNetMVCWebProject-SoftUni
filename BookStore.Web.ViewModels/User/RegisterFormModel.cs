@@ -25,7 +25,7 @@
         public string FirstName { get; set; }
 
 		[Required]
-		[StringLength(LastNameMaxLength, MinimumLength = LastNameMaxLength)]
+		[StringLength(LastNameMaxLength, MinimumLength = LastNameMinLength)]
         public string LastName { get; set; }
     }
 }
