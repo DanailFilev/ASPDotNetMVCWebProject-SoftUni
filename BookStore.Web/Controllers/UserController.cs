@@ -4,6 +4,7 @@
 	using BookStore.Web.ViewModels.User;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 	public class UserController : BaseController
 	{
@@ -61,6 +62,17 @@
 
 			return RedirectToAction("Index", "Home");
 
+		}
+
+		[HttpGet]
+		public IActionResult Login(string? returnUrl = null)
+		{
+			LoginFormModel model = new LoginFormModel()
+			{
+				ReturnUrl = returnUrl,
+			};
+
+			return View(model);
 		}
 	}
 }

@@ -68,7 +68,7 @@
 	// Function to redirect to login page
 	function redirectToLogin() {
 		var returnUrl = '@Url.Action("Index", "Cart", new { area = "" })';
-		var loginUrl = '@Url.Page("/Account/Login", new { area = "Identity" })' + '?returnUrl=' + encodeURIComponent(returnUrl);
+		var loginUrl = '@Url.Action("Login", "User")' + '?returnUrl=' + encodeURIComponent(returnUrl);
 
 		window.location.href = loginUrl;
 	}
