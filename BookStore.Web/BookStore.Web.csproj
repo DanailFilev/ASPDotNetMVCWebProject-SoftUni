@@ -25,4 +25,8 @@
     <ProjectReference Include="..\BookStore.Web.ViewModels\BookStore.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Pages\Account\" />
+  </ItemGroup>
+
 </Project>

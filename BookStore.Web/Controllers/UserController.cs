@@ -2,23 +2,21 @@
 {
 	using BookStore.Data.Models;
 	using BookStore.Web.ViewModels.User;
-	using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 
 	public class UserController : BaseController
 	{
 		private readonly SignInManager<ApplicationUser> signInManager;
 		private readonly UserManager<ApplicationUser> userManager;
-		private readonly IUserStore<ApplicationUser> userStore;
 
         public UserController(SignInManager<ApplicationUser> signInManager,
-			UserManager<ApplicationUser> userManager,
-			IUserStore<ApplicationUser> userStore)
+			UserManager<ApplicationUser> userManager)
         {
             this.signInManager = signInManager;
 			this.userManager = userManager;
-			this.userStore = userStore;
         }
 
 		[HttpGet]
@@ -65,14 +63,37 @@
 		}
 
 		[HttpGet]
-		public IActionResult Login(string? returnUrl = null)
+		public async Task<IActionResult> Login(string? returnUrl = null)
 		{
+			await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
 			LoginFormModel model = new LoginFormModel()
 			{
 				ReturnUrl = returnUrl,
 			};
 
 			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Login(LoginFormModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			var result = await this.signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+			if(!result.Succeeded)
+			{
+				TempData["ErrorMessage"] = "There was an error while logging you in. Please try again later or contact administrator";
+
+				return View(model);
+			}
+
+			return Redirect(model.ReturnUrl ?? "/Home/Index");
+
 		}
 	}
 }
