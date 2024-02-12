@@ -1,47 +1,84 @@
 ﻿namespace BookStore.Web.Infrastructure.Extensions
 {
-    using Microsoft.Extensions.DependencyInjection;
-    using BookStore.Services.Data;
-    using BookStore.Services.Data.Interfaces;
-    using System.Reflection;
+	using Microsoft.Extensions.DependencyInjection;
+	using BookStore.Services.Data;
+	using BookStore.Services.Data.Interfaces;
+	using System.Reflection;
+	using Microsoft.AspNetCore.Builder;
+	using Microsoft.AspNetCore.Identity;
+	using BookStore.Data.Models;
 
-    public static class WebApplicationBuilderExtensions
-    {
-        /// <summary>
-        /// This method registers all services with their interfaces and implementations of given Assembly.
-        /// The Assembly is taken from the type of random service interface or implementation provided.
-        /// </summary>
-        /// <param name="serviceType"></param>
-        /// <exception cref="InvalidOperationException"></exception>
-        public static void AddApplicationServices(this IServiceCollection services, Type serviceType)
-        {
-            Assembly? serviceAssembly = Assembly.GetAssembly(serviceType);
-            if (serviceAssembly == null)
-            {
-                throw new InvalidOperationException("Invalid service type!");
-            }
+	using static BookStore.Common.GeneralApplicationConstants;
 
-            Type[] implementationTypes = serviceAssembly
-                .GetTypes()
-                .Where(t => t.Name.EndsWith("Service") && !t.IsInterface)
-                .ToArray();
+	public static class WebApplicationBuilderExtensions
+	{
+		/// <summary>
+		/// This method registers all services with their interfaces and implementations of given Assembly.
+		/// The Assembly is taken from the type of random service interface or implementation provided.
+		/// </summary>
+		/// <param name="serviceType"></param>
+		/// <exception cref="InvalidOperationException"></exception>
+		public static void AddApplicationServices(this IServiceCollection services, Type serviceType)
+		{
+			Assembly? serviceAssembly = Assembly.GetAssembly(serviceType);
+			if (serviceAssembly == null)
+			{
+				throw new InvalidOperationException("Invalid service type!");
+			}
 
-            foreach (Type implementationType in implementationTypes)
-            {
-                Type? interfaceType = implementationType
-                    .GetInterface($"I{implementationType.Name}");
+			Type[] implementationTypes = serviceAssembly
+				.GetTypes()
+				.Where(t => t.Name.EndsWith("Service") && !t.IsInterface)
+				.ToArray();
 
-                if (interfaceType == null)
-                {
-                    throw new InvalidOperationException($"No interface is provided for the service with name: {implementationType.Name}");
-                }
+			foreach (Type implementationType in implementationTypes)
+			{
+				Type? interfaceType = implementationType
+					.GetInterface($"I{implementationType.Name}");
 
-                services.AddScoped(interfaceType, implementationType);
-            }
+				if (interfaceType == null)
+				{
+					throw new InvalidOperationException($"No interface is provided for the service with name: {implementationType.Name}");
+				}
 
-            services.AddScoped<IBookService, BookService>();
+				services.AddScoped(interfaceType, implementationType);
+			}
 
-            services.AddSession();
-        }
-    }
+			services.AddScoped<IBookService, BookService>();
+
+			services.AddSession();
+		}
+
+		public static IApplicationBuilder SeedAdministrator(this IApplicationBuilder app, string email)
+		{
+			using IServiceScope scopedServices = app.ApplicationServices.CreateScope();
+
+			IServiceProvider serviceProvider = scopedServices.ServiceProvider;
+
+			UserManager<ApplicationUser> userManager =
+				serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+			RoleManager<IdentityRole<Guid>> roleManager =
+				serviceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+
+			Task.Run(async () =>
+			{
+				if (await roleManager.RoleExistsAsync(AdminRoleName))
+				{
+					return;
+				}
+
+				IdentityRole<Guid> role = new IdentityRole<Guid>(AdminRoleName);
+				
+				await roleManager.CreateAsync(role);
+
+				ApplicationUser adminUser = await userManager.FindByEmailAsync(email);
+
+				await userManager.AddToRoleAsync(adminUser, AdminRoleName);
+			})
+				.GetAwaiter()
+				.GetResult();
+
+			return app;
+		}
+	}
 }
