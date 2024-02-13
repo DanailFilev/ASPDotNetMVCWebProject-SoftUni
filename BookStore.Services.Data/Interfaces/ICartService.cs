@@ -12,7 +12,7 @@
         Task ClearCartAsync(Guid userId);
 
         public int GetItemsCount(Guid userId);
-		Task<CartItem> GetCartItemAsync(Guid userId, int cartItemId);
+		Task<CartItem?> GetCartItemAsync(Guid? userId, int cartItemId);
         Task UpdateQuantityAsync(Guid userId, int cartItemId, int newQuantity);
     }
 }

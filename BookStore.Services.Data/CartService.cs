@@ -131,7 +131,7 @@
             }
         }
 
-        public async Task<CartItem> GetCartItemAsync(Guid userId, int cartItemId)
+        public async Task<CartItem?> GetCartItemAsync(Guid? userId, int cartItemId)
         {
             return await dbContext.CartItems
                 .Include(ci => ci.Book)  // Include any related entities you need
@@ -151,11 +151,5 @@
                 await this.dbContext.SaveChangesAsync();
             }
         }
-
-        //public int GetItemCount()
-        //{
-        //    int cartItemCount = dbContext.CartItems.Sum(item => item.Quantity);
-        //    return cartItemCount;
-        //}
     }
 }

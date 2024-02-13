@@ -76,8 +76,6 @@
         [HttpPost]
         public async Task<IActionResult> Edit(EditBookViewModel model, int id)
         {
-            var enteredPrice = model.Price;
-
             if (!ModelState.IsValid)
             {
                 return View(model);
