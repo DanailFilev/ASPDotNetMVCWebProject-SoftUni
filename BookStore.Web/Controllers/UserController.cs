@@ -2,7 +2,8 @@
 {
 	using BookStore.Data.Models;
 	using BookStore.Web.ViewModels.User;
-    using Microsoft.AspNetCore.Authentication;
+	using Griesoft.AspNetCore.ReCaptcha;
+	using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,8 @@
 		}
 
 		[HttpPost]
+		[ValidateRecaptcha(Action = nameof(Register),
+			ValidationFailedAction = ValidationFailedAction.ContinueRequest)]
 		public async Task<IActionResult> Register(RegisterFormModel model)
 		{
 			if (!ModelState.IsValid)

@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <form asp-action="Register" method="post">
+            <form asp-action="Register" id="registerForm" method="post">
                 <h1 class="text-center">@ViewData["Title"]</h1>
                 <h2 class="text-center">Create a new account.</h2>
                 <hr />
@@ -42,8 +42,7 @@
                     <input asp-for="ConfirmPassword" type="password" class="form-control" />
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
-
-                <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                <recaptcha-v3 form-id="registerForm" action="submit" class="w-100 btn btn-lg btn-primary">Register</recaptcha-v3>
             </form>
         </div>
     </div>
