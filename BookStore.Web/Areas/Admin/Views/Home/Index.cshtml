@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Admin Dashboard";
+}
+
+<div class="container">
+    <h1>Admin Dashboard</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">@ViewBag.TotalUsers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Orders</h5>
+                    <p class="card-text">@ViewBag.TotalOrders</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Orders</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>User</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in ViewBag.RecentOrders)
+                                {
+                                    <tr>
+                                        <td>@order.OrderID</td>
+                                        <td>@order.User.Name</td> <!-- Assuming User is a property of Order -->
+                                        <td>@order.Product.Name</td> <!-- Assuming Product is a property of Order -->
+                                        <td>@order.Quantity</td>
+                                        <td>@order.Total</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

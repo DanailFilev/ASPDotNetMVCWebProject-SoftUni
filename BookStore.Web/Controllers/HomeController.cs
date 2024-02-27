@@ -1,10 +1,10 @@
 ﻿namespace BookStore.Web.Controllers
 {
-    using System.Diagnostics;
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
     using ViewModels.Home;
 
+    using static BookStore.Common.GeneralApplicationConstants;
     public class HomeController : BaseController
     {
         public HomeController()
@@ -14,6 +14,12 @@
         [AllowAnonymous]
         public IActionResult Index()
         {
+            if (this.User.IsInRole(AdminRoleName))
+            {
+               return this.RedirectToAction("Index", "Home", new { Area = AdminAreaName });
+            }
+
+
             var model = new IndexViewModel
             {
                 FeaturedItems = new List<FeaturedItemViewModel>
